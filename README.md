@@ -2,7 +2,7 @@
 
 A minimal working product that helps automate **GSA onboarding review** by ingesting documents, classifying them, extracting key fields, applying GSA Rules Pack (R1–R5) with retrieval-augmented generation (RAG), and producing compliance checklists, negotiation briefs, and client email drafts.
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.9+
@@ -63,7 +63,7 @@ open index.html
   - Negotiation preparation brief
   - Client email draft
 
-## 🏗️ Architecture
+##  Architecture
 
 ### System Overview
 GetGSA uses a modern microservices architecture with AI-powered document analysis:
@@ -133,7 +133,7 @@ GetGSA uses a modern microservices architecture with AI-powered document analysi
 - Confidence scoring for uncertain extractions
 - Professional tone in generated communications
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 gsa/
@@ -163,20 +163,20 @@ Run the test suite:
 make test
 ```
 
-## 🔒 Security
+## Security
 
 - PII redaction for emails and phone numbers
 - Input size limits (2MB max)
 - Rate limiting
 - AI abstention when uncertain
 
-## 📚 Documentation
+##  Documentation
 
 - [Architecture](docs/ARCHITECTURE.md) - System design and data flow
 - [Security](docs/SECURITY.md) - Security considerations and PII handling
 - [Prompts](docs/PROMPTS.md) - AI prompts and guardrails
 
-## 🎯 GSA Rules Pack
+##  GSA Rules Pack
 
 The system applies these rules:
 - **R1:** Identity & Registry requirements
