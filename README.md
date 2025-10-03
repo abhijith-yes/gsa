@@ -52,7 +52,7 @@ open index.html
 2. **Analyze:** Click "Analyze" to get compliance results
 3. **Review Results:** Check the parsed fields, compliance checklist, negotiation brief, and client email
 
-## 📋 Features
+##  Features
 
 - **Document Classification:** Automatically categorizes documents (profile, past performance, pricing)
 - **Field Extraction:** Extracts UEI, DUNS, NAICS, POC info, and pricing data
