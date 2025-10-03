@@ -156,7 +156,7 @@ gsa/
 └── README.md
 ```
 
-## 🧪 Testing
+##  Testing
 
 Run the test suite:
 ```bash
@@ -185,6 +185,6 @@ The system applies these rules:
 - **R4:** Pricing & catalog requirements
 - **R5:** Submission hygiene (PII redaction)
 
-## 📞 Support
+##  Support
 
 For issues or questions, please check the documentation or create an issue in the repository.
