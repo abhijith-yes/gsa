@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  getgsa-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=sqlite:///./gsa.db
+      - DEBUG=False
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - gsa-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
+volumes:
+  gsa-data:
+
+

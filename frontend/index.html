@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetGSA - GSA Onboarding Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-panel, .output-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .panel-header h2 {
+            color: #2d3748;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background-color: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .status.error {
+            background-color: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #feb2b2;
+        }
+
+        .status.info {
+            background-color: #bee3f8;
+            color: #2a4365;
+            border: 1px solid #90cdf4;
+        }
+
+        .results {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .results h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .result-section {
+            margin-bottom: 2rem;
+        }
+
+        .result-section h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .result-section pre {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .field-item {
+            background: #f7fafc;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .field-value {
+            color: #2d3748;
+            margin-top: 0.25rem;
+        }
+
+        .compliance-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .compliance-ok {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .compliance-problems {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+
+        .problem-item {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-code {
+            font-weight: 600;
+            color: #742a2a;
+        }
+
+        .problem-rule {
+            color: #c53030;
+            font-size: 0.9rem;
+        }
+
+        .problem-evidence {
+            color: #4a5568;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GetGSA</h1>
+            <p>AI-Powered GSA Onboarding Assistant</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-panel">
+                <div class="panel-header">
+                    <h2>Document Input</h2>
+                </div>
+                
+                <div id="statusContainer"></div>
+                
+                <div class="form-group">
+                    <label for="docInput">Paste your GSA onboarding documents here:</label>
+                    <textarea 
+                        id="docInput" 
+                        placeholder="Example:
+Company Profile:
+Acme Robotics LLC
+UEI: ABC123DEF456
+DUNS: 123456789
+NAICS: 541511, 541512
+SAM Status: Active
+POC: jane@acme.com, (555) 123-4567
+
+Past Performance:
+Project Alpha - $50,000 - Custom software development for XYZ Corp
+Project Beta - $15,000 - System integration for ABC Inc"
+                    ></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button id="ingestBtn" onclick="ingest()">Ingest Documents</button>
+                    <button id="analyzeBtn" onclick="analyze()" disabled>Analyze</button>
+                </div>
+            </div>
+
+            <div class="output-panel">
+                <div class="panel-header">
+                    <h2>Analysis Results</h2>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing documents with AI...</p>
+                </div>
+                
+                <div id="results" style="display: none;">
+                    <div class="results">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let requestId = null;
+        const API_BASE = window.location.origin + '/api/v1';
+
+        function showStatus(message, type = 'info') {
+            const container = document.getElementById('statusContainer');
+            container.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showLoading(show = true) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('results').style.display = show ? 'none' : 'block';
+        }
+
+        async function ingest() {
+            const text = document.getElementById('docInput').value.trim();
+            
+            if (!text) {
+                showStatus('Please enter some document text first.', 'error');
+                return;
+            }
+
+            showStatus('Ingesting documents...', 'info');
+            document.getElementById('ingestBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/ingest`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        documents: [{
+                            name: 'Manual Input',
+                            text: text
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    requestId = data.request_id;
+                    document.getElementById('analyzeBtn').disabled = false;
+                    showStatus(`Documents ingested successfully! Request ID: ${requestId}`, 'success');
+                } else {
+                    showStatus(`Error: ${data.detail}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`Network error: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('ingestBtn').disabled = false;
+            }
+        }
+
+        async function analyze() {
+            if (!requestId) {
+                showStatus('Please ingest documents first.', 'error');
+                return;
+            }
+
+            showLoading(true);
+            document.getElementById('analyzeBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        request_id: requestId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                    showStatus('Analysis completed successfully!', 'success');
+                } else {
+                    showStatus(`Analysis error: ${data.detail}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`Network error: ${error.message}`, 'error');
+            } finally {
+                showLoading(false);
+                document.getElementById('analyzeBtn').disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('results');
+            
+            let html = `
+                <h2>Analysis Results</h2>
+                
+                <div class="result-section">
+                    <h3>Parsed Fields</h3>
+                    <div class="field-grid">
+                        <div class="field-item">
+                            <div class="field-label">UEI</div>
+                            <div class="field-value">${data.parsed.uei || 'Not found'}</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-label">DUNS</div>
+                            <div class="field-value">${data.parsed.duns || 'Not found'}</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-label">SAM Status</div>
+                            <div class="field-value">${data.parsed.sam_status || 'Unknown'}</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-label">Entity Name</div>
+                            <div class="field-value">${data.parsed.entity_name || 'Not found'}</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-label">NAICS Codes</div>
+                            <div class="field-value">${data.parsed.naics?.join(', ') || 'None found'}</div>
+                        </div>
+                        <div class="field-item">
+                            <div class="field-label">POC Email</div>
+                            <div class="field-value">${data.parsed.poc_email || 'Not found'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-section">
+                    <h3>Compliance Checklist</h3>
+                    <p>
+                        Status: 
+                        <span class="compliance-status ${data.checklist.required_ok ? 'compliance-ok' : 'compliance-problems'}">
+                            ${data.checklist.required_ok ? 'Requirements Met' : 'Issues Found'}
+                        </span>
+                    </p>
+                    
+                    ${data.checklist.problems?.length > 0 ? `
+                        <h4>Issues Found:</h4>
+                        ${data.checklist.problems.map(problem => `
+                            <div class="problem-item">
+                                <div class="problem-code">${problem.code}</div>
+                                <div class="problem-rule">Rule: ${problem.rule_id}</div>
+                                <div class="problem-evidence">Evidence: ${problem.evidence}</div>
+                            </div>
+                        `).join('')}
+                    ` : '<p>No compliance issues found!</p>'}
+                </div>
+
+                <div class="result-section">
+                    <h3>Negotiation Brief</h3>
+                    <pre>${data.brief}</pre>
+                </div>
+
+                <div class="result-section">
+                    <h3>Client Email Draft</h3>
+                    <pre>${data.client_email}</pre>
+                </div>
+
+                ${data.citations?.length > 0 ? `
+                    <div class="result-section">
+                        <h3>Rule Citations</h3>
+                        ${data.citations.map(citation => `
+                            <div class="field-item">
+                                <div class="field-label">${citation.rule_id}</div>
+                                <div class="field-value">${citation.chunk}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+            `;
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        // Auto-resize textarea
+        document.getElementById('docInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    </script>
+</body>
+</html>
