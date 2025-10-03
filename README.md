@@ -156,12 +156,7 @@ gsa/
 └── README.md
 ```
 
-##  Testing
 
-Run the test suite:
-```bash
-make test
-```
 
 ## Security
 
